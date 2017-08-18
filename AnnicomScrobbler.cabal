@@ -20,20 +20,21 @@ library
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings
 
-executable Test-exe
+executable AnnicomScrobbler-exe
   hs-source-dirs:      app
   main-is:             Main.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
-                     , Test
+                     , AnnicomScrobbler
   default-language:    Haskell2010
+  default-extensions:  OverloadedStrings
 
-test-suite Test-test
+test-suite AnnicomScrobbler-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
   build-depends:       base
-                     , Test
+                     , AnnicomScrobbler
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
 
