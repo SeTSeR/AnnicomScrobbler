@@ -1,9 +1,18 @@
 module Services.Preferences(playerName, annicomToken, logFileName) where
 
 data Preferences = Preferences {
-    playerName   :: String ,
-    annicomToken :: String ,
-    logFileName  :: String }
+    pName   :: String ,
+    aToken :: String ,
+    lFlileName  :: String }
 
 loadPreferences :: IO Preferences
-loadPreferences = undefined
+loadPreferences = return $ Preferences "Spotify" "" ""
+
+playerName :: IO String
+playerName = pName <$> loadPreferences
+
+annicomToken :: IO String
+annicomToken = undefined
+
+logFileName :: IO String
+logFileName = undefined

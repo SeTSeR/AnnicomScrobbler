@@ -15,5 +15,8 @@ import qualified Services.Preferences as Prefs
 someFunc :: IO ()
 someFunc = do
     song <- Get.getSong
-    Store.writeSong $ Store.song (Get.title song) (Get.artist song) (Get.genre song)
-    Send.sendSong $ Send.song (Get.title song) (Get.artist song) (Get.genre song)
+    case song of
+        Just song -> do
+            Store.writeSong $ Store.song (Get.title song) (Get.artist song) (Get.genre song)
+            Send.sendSong $ Send.song (Get.title song) (Get.artist song) (Get.genre song)
+        otherwise -> return ()
