@@ -1,10 +1,12 @@
-module Services.Preferences(playerName, annicomToken, logFileName) where
+module Services.Preferences(playerName, annicomLogin, annicomToken, logFileName, storeFileName) where
 
 import Data.Configurator.Types
 import qualified Data.Configurator as C
 
 loadPreferences :: IO Config
-loadPreferences = C.load [C.Required "$(HOME)/.annicomscrobbler"]
+loadPreferences = do
+    (conf, _) <- C.autoReload C.autoConfig [C.Required "$(HOME)/.annicomscrobbler"]
+    return conf
 
 playerName :: IO (Maybe String)
 playerName = loadPreferences >>= (\config -> C.lookup config "playerName")
@@ -16,4 +18,7 @@ annicomToken :: IO (Maybe String)
 annicomToken = loadPreferences >>= (\config -> C.lookup config "annicomToken")
 
 logFileName :: IO (Maybe String)
-logFileName = loadPreferences >>= (\config -> C.lookup config"logFileName")
+logFileName = loadPreferences >>= (\config -> C.lookup config "logFileName")
+
+storeFileName :: IO (Maybe String)
+storeFileName = loadPreferences >>= (\config -> C.lookup config "storeFileName")

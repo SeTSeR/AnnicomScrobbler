@@ -1,7 +1,6 @@
 module Services.Getter (getSong, getBusName) where
 
 import qualified Services.Song as Song
-import qualified Services.Store as S
 import qualified Services.Logger as L
 import qualified Services.Preferences as P
 
