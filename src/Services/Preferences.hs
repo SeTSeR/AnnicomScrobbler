@@ -1,18 +1,19 @@
 module Services.Preferences(playerName, annicomToken, logFileName) where
 
-data Preferences = Preferences {
-    pName   :: String ,
-    aToken :: String ,
-    lFlileName  :: String }
+import Data.Configurator.Types
+import qualified Data.Configurator as C
 
-loadPreferences :: IO Preferences
-loadPreferences = return $ Preferences "Spotify" "" ""
+loadPreferences :: IO Config
+loadPreferences = C.load [C.Required "$(HOME)/.annicomscrobbler"]
 
-playerName :: IO String
-playerName = pName <$> loadPreferences
+playerName :: IO (Maybe String)
+playerName = loadPreferences >>= (\config -> C.lookup config "playerName")
 
-annicomToken :: IO String
-annicomToken = undefined
+annicomLogin :: IO (Maybe String)
+annicomLogin = loadPreferences >>= (\config -> C.lookup config "annicomLogin")
 
-logFileName :: IO String
-logFileName = undefined
+annicomToken :: IO (Maybe String)
+annicomToken = loadPreferences >>= (\config -> C.lookup config "annicomToken")
+
+logFileName :: IO (Maybe String)
+logFileName = loadPreferences >>= (\config -> C.lookup config"logFileName")

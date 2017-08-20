@@ -1,21 +1,12 @@
-module Services.Store(title, genre, artist, song, getLastSong, getAllSongs, writeSong) where
+module Services.Store(getLastSong, getAllSongs, writeSong) where
 
-data Song = Song {
-    title  :: String ,
-    artist :: String ,
-    genre  :: String }
+import qualified Services.Song as Song
 
-song :: String -> String -> String -> Song
-song t a g = Song {
-    title  = t ,
-    artist = a ,
-    genre  = g }
-
-getLastSong :: Maybe Song
+getLastSong :: Maybe Song.Song
 getLastSong = undefined
 
-getAllSongs :: Maybe [Song]
+getAllSongs :: Maybe [Song.Song]
 getAllSongs = undefined
 
-writeSong :: Song -> IO ()
+writeSong :: Song.Song -> IO ()
 writeSong = undefined

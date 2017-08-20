@@ -7,6 +7,7 @@ module Lib
 import DBus
 import DBus.Client
 
+import qualified Services.Song as Song
 import qualified Services.Getter as Get
 import qualified Services.Sender as Send
 import qualified Services.Store  as Store
@@ -17,6 +18,6 @@ someFunc = do
     song <- Get.getSong
     case song of
         Just song -> do
-            Store.writeSong $ Store.song (Get.title song) (Get.artist song) (Get.genre song)
-            Send.sendSong $ Send.song (Get.title song) (Get.artist song) (Get.genre song)
+            Store.writeSong song
+            Send.sendSong song
         otherwise -> return ()
