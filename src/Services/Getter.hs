@@ -1,4 +1,4 @@
-module Services.Getter (getSong, getBusName) where
+module Services.Getter (getSong) where
 
 import qualified Services.Song as Song
 import qualified Services.Logger as L
@@ -16,8 +16,8 @@ getBusName playername = busName_ $ (++) "org.mpris.MediaPlayer2." $ map toLower 
 
 processSongParameter :: String -> Variant -> Song.Song -> Song.Song
 processSongParameter "xesam:title" currel sng = sng { Song.title = Maybe.fromJust $ fromVariant currel }
-processSongParameter "xesam:artist" currel sng = sng { Song.artist = Maybe.fromJust $ fromVariant currel }
-processSongParameter "xesam:genre" currel sng = sng { Song.genre = Maybe.fromJust $ fromVariant currel }
+processSongParameter "xesam:artist" currel sng = sng { Song.artists = Maybe.fromJust $ fromVariant currel }
+processSongParameter "xesam:genre" currel sng = sng { Song.genres = Maybe.fromJust $ fromVariant currel }
 processSongParameter _ _ sng = sng
 
 getCurrSong :: BusName -> IO (Maybe (Map.Map String Variant))

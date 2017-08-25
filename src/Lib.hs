@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Lib
-    ( someFunc
+    ( mainFunc
     ) where
 
 import DBus
@@ -13,8 +13,8 @@ import qualified Services.Sender as Send
 import qualified Services.Store  as Store
 import qualified Services.Preferences as Prefs
 
-someFunc :: IO ()
-someFunc = do
+mainFunc :: IO ()
+mainFunc = do
     song <- Get.getSong
     case song of
         Just song -> do

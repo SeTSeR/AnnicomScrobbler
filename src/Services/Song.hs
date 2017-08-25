@@ -1,7 +1,7 @@
-module Services.Song(Song(Song), title, artist, genre) where
+module Services.Song(Song(Song), title, artists, genres) where
 
 data Song = Song {
     title  :: String   ,
-    artist :: [String] ,
-    genre  :: [String] }
+    artists :: [String] ,
+    genres  :: [String] }
     deriving (Read, Show, Eq)

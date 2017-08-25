@@ -22,17 +22,17 @@ prepareRequest params = do
     formDataBody params request
 
 formBody :: String -> String -> Song.Song -> [Part]
-formBody login token song | null . Song.genre $ song = [
+formBody login token song | null . Song.genres $ song = [
     partBS "login"  $ fromString login ,
     partBS "token"  $ fromString token ,
     partBS "title"  $ fromString . Song.title $ song ,
-    partBS "artist" $ fromString . head . Song.artist $ song ]
+    partBS "artist" $ fromString . head . Song.artists $ song ]
                           | otherwise = [
     partBS "login"  $ fromString login ,
     partBS "token"  $ fromString token ,
     partBS "title"  $ fromString . Song.title $ song ,
-    partBS "artist" $ fromString . head . Song.artist $ song ,
-    partBS "genre"  $ fromString . head . Song.genre  $ song ]
+    partBS "artist" $ fromString . head . Song.artists $ song ,
+    partBS "genre"  $ fromString . head . Song.genres  $ song ]
 
 sendSong :: Song.Song -> IO ()
 sendSong song = do
