@@ -12,7 +12,8 @@ import DBus.Client
 import Data.Char(toLower)
 
 getBusName :: String -> BusName
-getBusName playername = busName_ $ (++) "org.mpris.MediaPlayer2." $ map toLower playername
+getBusName playername | map toLower playername == "deadbeef" = busName_ $ "org.mpris.MediaPlayer2.DeaDBeeF"
+                      | otherwise = busName_ $ (++) "org.mpris.MediaPlayer2." $ map toLower playername
 
 processSongParameter :: String -> Variant -> Song.Song -> Song.Song
 processSongParameter "xesam:title" currel sng = sng { Song.title = Maybe.fromJust $ fromVariant currel }
@@ -20,28 +21,36 @@ processSongParameter "xesam:artist" currel sng = sng { Song.artists = Maybe.from
 processSongParameter "xesam:genre" currel sng = sng { Song.genres = Maybe.fromJust $ fromVariant currel }
 processSongParameter _ _ sng = sng
 
-getCurrSong :: BusName -> IO (Maybe (Map.Map String Variant))
-getCurrSong busName = do
+getCurrSong :: BusName -> BusName -> IO (Maybe (Map.Map String Variant))
+getCurrSong busName fallbackBusName = do
     client <- connectSession
     reply <- call client $ getPropertyCall "org.mpris.MediaPlayer2.Player" "Metadata" `to` busName
     case reply of
-        Left msg -> L.writeToLog msg >> return Nothing
+        Left msg -> do
+            L.writeToLog msg
+            reply <- call client $ getPropertyCall "org.mpris.MediaPlayer2.Player" "Metadata" `to` fallbackBusName
+            case reply of
+                Left msg -> L.writeToLog msg >> return Nothing
+                Right answer -> let body = methodReturnBody answer
+                                in return (fromVariant (head body) >>= fromVariant)
         Right answer -> let body = methodReturnBody answer
                         in return (fromVariant (head body) >>= fromVariant)
 
 getSong :: IO (Maybe Song.Song)
 getSong = let
-    getSong :: BusName -> IO (Maybe Song.Song)
-    getSong busName = do
-        songmap <- getCurrSong busName
+    getSong :: BusName -> BusName -> IO (Maybe Song.Song)
+    getSong busName fallbackBusName = do
+        songmap <- getCurrSong busName fallbackBusName
         return $ do
             ansmap <- songmap
             return $ Map.foldrWithKey processSongParameter (Song.Song "" [] []) ansmap
           in do
             mPlayerName <- P.playerName
-            case mPlayerName of
-                Just name -> getSong . getBusName $ name
-                Nothing -> return Nothing
+            fmPlayerName <- P.fallbackPlayerName
+            case (mPlayerName, fmPlayerName) of
+                (Just name, Just name1) -> getSong (getBusName name) (getBusName name1)
+                (Just name, _) -> getSong (getBusName "") (getBusName "Clementine")
+                (_, _) -> return Nothing
 
 getPropertyCall :: String -> String -> MethodCall
 getPropertyCall interface property = (methodCall "/org/mpris/MediaPlayer2" "org.freedesktop.DBus.Properties" "Get")

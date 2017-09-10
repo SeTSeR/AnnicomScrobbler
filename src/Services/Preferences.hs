@@ -1,4 +1,4 @@
-module Services.Preferences(playerName, annicomLogin, annicomToken, logFileName, storeFileName) where
+module Services.Preferences(playerName, fallbackPlayerName, annicomLogin, annicomToken, logFileName, storeFileName) where
 
 import Data.Configurator.Types
 import qualified Data.Configurator as C
@@ -10,6 +10,9 @@ loadPreferences = do
 
 playerName :: IO (Maybe String)
 playerName = loadPreferences >>= (\config -> C.lookup config "playerName")
+
+fallbackPlayerName :: IO (Maybe String)
+fallbackPlayerName = loadPreferences >>= (\config -> C.lookup config "playerName")
 
 annicomLogin :: IO (Maybe String)
 annicomLogin = loadPreferences >>= (\config -> C.lookup config "annicomLogin")

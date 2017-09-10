@@ -35,7 +35,7 @@ test-suite AnnicomScrobbler-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  build-depends:       base
+  build-depends:       base, QuickCheck
                      , AnnicomScrobbler
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
