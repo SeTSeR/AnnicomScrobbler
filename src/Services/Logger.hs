@@ -4,5 +4,7 @@ import qualified Services.Preferences as P
 
 writeToLog :: (Show a) => a -> IO ()
 writeToLog toWrite = do
-    Just logName <- P.logFileName
-    appendFile logName $ (++"\n") . show $ toWrite
+    log <- P.logFileName
+    case log of
+        Just logName -> appendFile logName $ (++"\n") . show $ toWrite
+        Nothing -> return ()
