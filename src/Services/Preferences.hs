@@ -3,9 +3,12 @@ module Services.Preferences(playerName, fallbackPlayerName, annicomLogin, annico
 import Data.Configurator.Types
 import qualified Data.Configurator as C
 
+import System.Environment.XDG.BaseDir (getUserConfigDir)
+
 loadPreferences :: IO Config
 loadPreferences = do
-    (conf, _) <- C.autoReload C.autoConfig [C.Required "$(HOME)/.annicomscrobbler"]
+    configDir <- getUserConfigDir "AnnicomScrobbler"
+    (conf, _) <- C.autoReload C.autoConfig [C.Required $ configDir ++ "/annicomscrobbler"]
     return conf
 
 playerName :: IO (Maybe String)

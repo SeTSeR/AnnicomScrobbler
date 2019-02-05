@@ -18,7 +18,7 @@ library
   exposed-modules:     Lib, Services.Song, Services.Preferences, Services.Logger, Services.Getter,
                        Services.Sender, Services.Store
   build-depends:       base >= 4.7 && < 5, dbus, containers, unordered-containers, configurator,
-                       http-conduit, bytestring, aeson, http-client, utf8-string
+                       http-conduit, bytestring, aeson, http-client, utf8-string, xdg-basedir
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings
 
