@@ -46,11 +46,9 @@ getSong = let
             return $ Map.foldrWithKey processSongParameter (Song.Song "" [] []) ansmap
           in do
             mPlayerName <- P.playerName
-            fmPlayerName <- P.fallbackPlayerName
-            case (mPlayerName, fmPlayerName) of
-                (Just name, Just name1) -> getSong (getBusName name) (getBusName name1)
-                (Just name, _) -> getSong (getBusName "") (getBusName "Clementine")
-                (_, _) -> return Nothing
+            fallbackPlayerName <- P.fallbackPlayerName
+            let name = Maybe.fromMaybe "" mPlayerName
+            getSong (getBusName name) (getBusName fallbackPlayerName)
 
 getPropertyCall :: String -> String -> MethodCall
 getPropertyCall interface property = (methodCall "/org/mpris/MediaPlayer2" "org.freedesktop.DBus.Properties" "Get")

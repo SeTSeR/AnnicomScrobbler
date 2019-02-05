@@ -11,8 +11,8 @@ loadPreferences = do
 playerName :: IO (Maybe String)
 playerName = loadPreferences >>= (\config -> C.lookup config "playerName")
 
-fallbackPlayerName :: IO (Maybe String)
-fallbackPlayerName = loadPreferences >>= (\config -> C.lookup config "playerName")
+fallbackPlayerName :: IO String
+fallbackPlayerName = return "spotify"
 
 annicomLogin :: IO (Maybe String)
 annicomLogin = loadPreferences >>= (\config -> C.lookup config "annicomLogin")
